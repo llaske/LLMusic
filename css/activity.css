@@ -1,0 +1,31 @@
+.staff {
+	position: relative;
+	margin-left: 100px;
+	margin-top: 100px;
+}
+
+.clef-image {
+	width: 600px;
+}
+
+.note {
+	height: 100%;
+	background-color: red;
+}
+
+.note-image {
+	width: 30px;
+	position: absolute;
+}
+
+.note-ledger {
+	width: 56px;
+	position: absolute;
+}
+
+.note-name {
+	position: absolute;
+	bottom: 0px;
+	width: 20px;
+	text-align: center;
+}
