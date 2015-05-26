@@ -5,8 +5,7 @@ enyo.kind({
 	kind: enyo.Control,
 	components: [
 		{name: "staff", classes: "staff", components: [
-			//{name: "clef", kind: "Image", classes: "clef-image", src: "images/G_clef.svg"},
-			{name: "clef", kind: "Image", classes: "clef-image", src: "images/F_clef.svg"},
+			{name: "clef", kind: "LLMusic.Clef"},
 			{name: "notes", components: [
 			]}
 		]}
@@ -25,15 +24,15 @@ enyo.kind({
 		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy();	}
 		
 		// Display notes
-		var gamme = ["do", "ré", "mi", "fa", "sol", "la", "si"];
-		//var clef = "sol";
-		//var index = 0;
-		//var octave = 4;
-		var clef = "fa";
-		var index = 2;
-		var octave = 2;
+		var clef = 4;
+		var index = 0;
+		var octave = 4;
+		//var clef = 3;
+		//var index = 2;
+		//var octave = 2;
+		this.$.clef.setNote(clef);
 		for(var i = 0 ; i < 12 ; i++ ) {
-			if (index == gamme.length) {
+			if (index == 7) {
 				octave++;
 				index = 0;
 			}
@@ -41,9 +40,9 @@ enyo.kind({
 				{
 					kind: "LLMusic.Note",
 					clef: clef,
-					note: gamme[index++],
+					note: index++,
 					octave: octave,
-					x: i
+					index: i
 				},
 				{ owner: this }
 			).render();
