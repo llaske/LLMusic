@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   width="80"
+   height="80"
+   viewBox="1.6 -3.2 80.000003 108"
+   enable-background="new 0 0 32 32"
+   xml:space="preserve"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="microphone.svg"><metadata
+   id="metadata12"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs10" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1600"
+   inkscape:window-height="837"
+   id="namedview8"
+   showgrid="false"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0"
+   inkscape:zoom="2.6074563"
+   inkscape:cx="-99.155699"
+   inkscape:cy="-31.509476"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<path
+   id="mic"
+   d="m 41.600002,61.6 c 5.14944,0 9.36,-4.32 9.36,-9.6 V 32.32 c 0,-5.28 -4.21056,-9.6 -9.36,-9.6 -5.14944,0 -9.359999,4.32 -9.359999,9.6 V 52 c 0,5.28 4.210559,9.6 9.359999,9.6 z M 52.881922,42.16 V 52 c 0,6.35328 -5.06112,11.52 -11.28192,11.52 -6.2208,0 -11.279999,-5.16672 -11.279999,-11.52 V 42.16 H 24.561921 V 52 c 0,8.53056 6.132482,15.61344 14.154241,17.01312 V 73.12 h -6.474239 v 5.76 h 18.718079 v -5.76 h -6.48192 v -4.10688 c 8.02752,-1.39968 14.16,-8.48256 14.16,-17.01312 v -9.84 h -5.75616 z"
+   inkscape:connector-curvature="0" />
+</svg>
