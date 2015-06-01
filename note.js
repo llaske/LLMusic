@@ -7,7 +7,9 @@ enyo.kind({
 		note: 0,
 		clef: 4,
 		octave: 4,
-		index: -1
+		index: -1,
+		notename: null,
+		color: 1
 	},
 	components: [
 		{ name: "noteimage", kind: "Image", src: "images/note.svg", classes: "note-image" },
@@ -32,14 +34,25 @@ enyo.kind({
 	},
 	
 	noteChanged: function() {
-		this.$.notename.setContent(this.noteName());
 		this.indexChanged();
 		this.computePosition();
+		this.notenameChanged();
+		this.colorChanged();
+	},
+	
+	notenameChanged: function() {
+		this.$.notename.setContent(this.noteName());
+	},
+	
+	colorChanged: function() {
+		this.$.notename.addRemoveClass("note-color-0", this.color == 0);
+		this.$.notename.addRemoveClass("note-color-1", this.color == 1);
+		this.$.notename.addRemoveClass("note-color-2", this.color == 2);
 	},
 	
 	// Utility methods
 	noteName: function() {
-		return Util.noteName(this.note);
+		return (this.notename != null ? this.notename : Util.noteName(this.note));
 	},
 	
 	clefName: function() {

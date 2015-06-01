@@ -55,6 +55,7 @@ enyo.kind({
 		this.tempo = 0;
 		this.expectedNotes = [];
 		this.inputNotes = [];
+		this.noteObjects = [];
 		this.timer = null;
 	},
 
@@ -87,7 +88,7 @@ enyo.kind({
 		
 		// Launch recognition timer
 		this.currentNote = -1;
-		var delay = (1700-this.$.temposwitch.getValue()*5);
+		var delay = (4000-this.$.temposwitch.getValue()*22);
         this.timer = window.setInterval(enyo.bind(this, "drawNote"), delay);			
 	},
 	
@@ -117,16 +118,19 @@ enyo.kind({
 		
 		// Draw expected note at this time
 		var note = this.expectedNotes[this.currentNote];
-		this.$.notes.createComponent(
+		var noteObject = this.$.notes.createComponent(
 			{
 				kind: "LLMusic.Note",
 				clef: this.$.clef.getNote(),
 				note: note.note,
 				octave: note.octave,
-				index: this.currentNote
+				index: this.currentNote,
+				notename: ""
 			},
 			{ owner: this }
-		).render();
+		);
+		this.noteObjects.push(noteObject);
+		noteObject.render();
 	},
 	
 	computeScore: function() {
@@ -134,8 +138,18 @@ enyo.kind({
 		var len = this.expectedNotes.length;
 		var score = 0;
 		for (var i = 0 ; i < len ; i++) {
-			if (Util.noteName(this.expectedNotes[i].note) == this.inputNotes[i])
+			var expected = Util.noteName(this.expectedNotes[i].note);
+			var input = this.inputNotes[i];
+			var noteObject = this.noteObjects[i];
+			noteObject.setNotename(expected);
+			if (expected == input) {
+				noteObject.setColor(2);
 				score++;
+			} else if (input == -1) {
+				noteObject.setColor(1);
+			} else {
+				noteObject.setColor(0);
+			}
 		}
 		
 		// Display
@@ -170,7 +184,9 @@ enyo.kind({
 	
 	noteClicked: function(inSender, inEvent) {
 		if (this.started) {
-			this.inputNotes[this.currentNote] = inSender.getContent();
+			var note = inSender.getContent();
+			this.inputNotes[this.currentNote] = note;
+			this.noteObjects[this.currentNote].setNotename(note+"?");
 		}
 	},
 	

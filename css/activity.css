@@ -30,6 +30,19 @@
 	bottom: 0px;
 	width: 20px;
 	text-align: center;
+	font-weight: bold;
+}
+
+.note-color-0 {
+	color: red;
+}
+
+.note-color-1 {
+	color: black;
+}
+
+.note-color-2 {
+	color: green;
 }
 
 .switch-clef-block {
@@ -137,6 +150,8 @@
 	position: absolute;
 	left: 750px;
 	top: 300px;
+	width: 80px;
+	text-align: center;
 }
 
 .score-bad {
