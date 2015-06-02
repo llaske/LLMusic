@@ -69,6 +69,8 @@ enyo.kind({
 			
 		// Compute expected notes
 		this.expectedNotes = [];
+		this.inputNotes = [];
+		this.noteObjects = [];
 		var gammeLength = Util.getGamme().length;
 		var clefNote = this.$.clef.getNote();
 		var startNote = (clefNote == 4 ? 0 : 2);
@@ -106,6 +108,7 @@ enyo.kind({
 		
 		// Compute score
 		this.computeScore();
+		this.started = false;
 	},
 
 	drawNote: function() {
