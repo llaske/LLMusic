@@ -43,7 +43,7 @@ enyo.kind({
 			{kind: "Button", name: "button6", content: Util.noteName(6), classes: "keyboard-key", ontap: "noteClicked"},
 		]},
 		{classes: "microphone", name: "microphone", showing: false, components: [
-			{name: "talk", content: "blablabla", classes: "talk-text"},
+			{name: "talk", content: "", classes: "talk-text"},
 			{kind: "Image", src: "images/microphone_gray.svg", classes: "talk-image"}
 		]}
 	],
@@ -57,6 +57,7 @@ enyo.kind({
 		this.inputNotes = [];
 		this.noteObjects = [];
 		this.timer = null;
+		this.recognition = null;
 	},
 
 	// Processing
@@ -67,7 +68,7 @@ enyo.kind({
 		this.$.inputswitch.setDisabled(true);
 		this.$.score.setShowing(false);
 			
-		// Compute expected notes
+		// Generate expected notes
 		this.expectedNotes = [];
 		this.inputNotes = [];
 		this.noteObjects = [];
@@ -86,12 +87,17 @@ enyo.kind({
 		// Remove notes
 		var notes = [];
 		enyo.forEach(this.$.notes.getControls(), function(note) { notes.push(note); });
-		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy();	}
+		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy(); }
+		this.$.talk.setContent("");
 		
 		// Launch recognition timer
 		this.currentNote = -1;
 		var delay = (4000-this.$.temposwitch.getValue()*22);
-        this.timer = window.setInterval(enyo.bind(this, "drawNote"), delay);			
+		if (this.recognition != null) {
+			this.recognitionValue = '';
+			this.recognition.start();
+		}		
+        this.timer = window.setInterval(enyo.bind(this, "drawNote"), delay);		
 	},
 	
 	stopGame: function() {
@@ -106,16 +112,23 @@ enyo.kind({
 			this.timer == null;		
 		}
 		
-		// Compute score
-		this.computeScore();
 		this.started = false;
+		if (this.recognition != null) {
+			// Stop recognition
+			this.recognition.stop();
+		} else {
+			// Compute score
+			this.computeScore();
+		}
 	},
 
-	drawNote: function() {
+	drawNote: function() {	
 		// Pass last note, stop game
 		this.currentNote = this.currentNote + 1;
 		if (this.currentNote == this.expectedNotes.length) {
 			this.stopGame();
+			if (this.recognition != null)
+				this.recognition.stop();
 			return;
 		}
 		
@@ -144,6 +157,7 @@ enyo.kind({
 			var expected = Util.noteName(this.expectedNotes[i].note);
 			var input = this.inputNotes[i];
 			var noteObject = this.noteObjects[i];
+			if (!noteObject) continue;
 			noteObject.setNotename(expected);
 			if (expected == input) {
 				noteObject.setColor(2);
@@ -177,16 +191,33 @@ enyo.kind({
 	
 	inputChanged: function(inSender, inEvent) {
 		if (!inSender.getValue()) {
+			// Show keyboard
+			this.recognition = null;
 			this.$.keyboard.setShowing(true);
 			this.$.microphone.setShowing(false);
 		} else {
+			// Launch recognition system
+			this.recognition = this.createComponent({
+				kind: "Recognition",
+				lang: "fr-FR",
+				onResult: "recognitionResult"
+			}, { owner: this });
+			if (!this.recognition.isSupported()) {
+				// Not supported here
+				this.recognition = null;
+				inSender.setValue(false);
+				return;
+			}
 			this.$.keyboard.setShowing(false);
-			this.$.microphone.setShowing(true);		
+			this.$.microphone.setShowing(true);
+			if (this.$.temposwitch.getValue() < 50)
+				this.$.temposwitch.setValue(50);
 		}
 	},
 	
 	noteClicked: function(inSender, inEvent) {
-		if (this.started) {
+		if (this.started && this.currentNote != -1) {
+			// Display note value
 			var note = inSender.getContent();
 			this.inputNotes[this.currentNote] = note;
 			this.noteObjects[this.currentNote].setNotename(note+"?");
@@ -207,6 +238,37 @@ enyo.kind({
 			this.startGame();
 		} else {
 			this.stopGame();
+		}
+	},
+	
+	recognitionResult: function(s, e) {
+		var interimRecognition = '';
+		for (var i = e.resultIndex; i < e.results.length; ++i) {
+			if (e.results[i].isFinal) {
+				this.recognitionValue += e.results[i][0].transcript;
+			} else {
+				interimRecognition += e.results[i][0].transcript;
+			}
+		}
+		this.$.talk.setContent(interimRecognition);
+		if (e.results[e.results.length-1].isFinal) {
+			this.$.talk.setContent(this.recognitionValue);
+			this.recognitionInput();
+			this.computeScore();
+		}
+	},
+	
+	recognitionInput: function() {
+		var answers = this.recognitionValue.split(' ');
+		for (var i = 0 ; i < answers.length ; i++) {
+			var panswer = answers[i].toLowerCase();
+			if (panswer == 'là') panswer = 'la';
+			else if (panswer == 'ray') panswer = 'ré';
+			else if (panswer == 'mie') panswer = 'mi';
+			this.inputNotes[i] = panswer;
+			var noteObject = this.noteObjects[i];
+			if (!noteObject) continue;
+			noteObject.setNotename(panswer+"?");
 		}
 	}
 });
