@@ -10,8 +10,12 @@ enyo.kind({
 			]}
 		]},
 		{kind: "onyx.Button", name:"playstop", classes: "playstop-button", ontap:"playstopClicked", components: [
-			{name: "playstopimage", kind: "Image", src: "images/play.svg", classes: "playstop-image"},
+			{name: "playstopimage", kind: "Image", src: "images/play.svg", classes: "playstop-image"}
 		]},
+		{kind: "onyx.Button", name:"book", classes: "book-button", ontap:"bookClicked", components: [
+			{name: "bookimage", kind: "Image", src: "images/book.svg", classes: "book-image"},
+			{name: "bookindex", content: "1", classes: "book-index"}
+		]},		
 		{name: "score", classes: "score", content: "-/-", showing: false},
 		{classes: "switch-clef-block", components: [
 			{kind: "Image", src: "images/F_clef_icon.svg", classes: "switch-clef"},
@@ -58,6 +62,8 @@ enyo.kind({
 		this.noteObjects = [];
 		this.timer = null;
 		this.recognition = null;
+		this.currentNote = -1;
+		this.bookIndex = 0;
 	},
 
 	// Processing
@@ -67,6 +73,7 @@ enyo.kind({
 		this.$.clefswitch.setDisabled(true);
 		this.$.inputswitch.setDisabled(true);
 		this.$.score.setShowing(false);
+		this.$.book.setDisabled(true);
 			
 		// Generate expected notes
 		this.expectedNotes = [];
@@ -85,9 +92,7 @@ enyo.kind({
 		}
 		
 		// Remove notes
-		var notes = [];
-		enyo.forEach(this.$.notes.getControls(), function(note) { notes.push(note); });
-		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy(); }
+		this.clearNotes();
 		this.$.talk.setContent("");
 		
 		// Launch recognition timer
@@ -105,6 +110,7 @@ enyo.kind({
 		this.$.playstopimage.setSrc("images/play.svg");
 		this.$.clefswitch.setDisabled(false);
 		this.$.inputswitch.setDisabled(false);
+		this.$.book.setDisabled(false);
 		
 		// Stop timer
 		if (this.timer != null) {
@@ -122,14 +128,22 @@ enyo.kind({
 		}
 	},
 
+	clearNotes: function() {
+		var notes = [];
+		enyo.forEach(this.$.notes.getControls(), function(note) { notes.push(note); });
+		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy(); }	
+	},
+	
 	drawNote: function() {	
-		// Pass last note, stop game
-		this.currentNote = this.currentNote + 1;
-		if (this.currentNote == this.expectedNotes.length) {
-			this.stopGame();
-			if (this.recognition != null)
-				this.recognition.stop();
-			return;
+		// Pass last note in play, stop game
+		if (this.started) {
+			this.currentNote = this.currentNote + 1;
+			if (this.currentNote == this.expectedNotes.length) {
+				this.stopGame();
+				if (this.recognition != null)
+					this.recognition.stop();
+				return;
+			}
 		}
 		
 		// Draw expected note at this time
@@ -141,7 +155,7 @@ enyo.kind({
 				note: note.note,
 				octave: note.octave,
 				index: this.currentNote,
-				notename: ""
+				notename: this.started ? "" : null
 			},
 			{ owner: this }
 		);
@@ -186,6 +200,7 @@ enyo.kind({
 	
 	// Event handling
 	clefChanged: function(inSender, inEvent) {
+		this.clearNotes();
 		this.$.clef.setNote(inSender.getValue() ? 3 : 4);
 	},
 	
@@ -239,6 +254,26 @@ enyo.kind({
 		} else {
 			this.stopGame();
 		}
+	},
+
+	bookClicked: function() {
+		this.clearNotes();
+		var gammeLength = Util.getGamme().length;
+		var clefNote = this.$.clef.getNote();
+		var startNote = (clefNote == 4 ? 0 : 2);
+		var startOctave = (clefNote == 4 ? 4 : 2);
+		this.expectedNotes = [];
+		var startIndex = this.bookIndex*8;
+		var endIndex = (startIndex == 0 ? 8 : 13);
+		for(var i = startIndex ; i < endIndex ; i++) {
+			var note = (startNote + i) % gammeLength;
+			var octave = (startOctave + Math.floor((startNote + i) / gammeLength));
+			this.expectedNotes.push({note: note, octave: octave});
+			this.currentNote = i - startIndex;
+			this.drawNote();
+		}
+		this.bookIndex = (this.bookIndex + 1) % 2;
+		this.$.bookindex.setContent(this.bookIndex+1);
 	},
 	
 	recognitionResult: function(s, e) {
