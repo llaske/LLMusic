@@ -63,6 +63,7 @@ enyo.kind({
 		this.timer = null;
 		this.recognition = null;
 		this.currentNote = -1;
+		this.booked = false;
 		this.bookIndex = 0;
 	},
 
@@ -202,6 +203,10 @@ enyo.kind({
 	clefChanged: function(inSender, inEvent) {
 		this.clearNotes();
 		this.$.clef.setNote(inSender.getValue() ? 3 : 4);
+		if (this.booked) {
+			this.updateBookIndex();
+			this.bookClicked();
+		}
 	},
 	
 	inputChanged: function(inSender, inEvent) {
@@ -250,6 +255,7 @@ enyo.kind({
 	playstopClicked: function(inSender, inEvent) {
 		this.started = !this.started;
 		if (this.started) {
+			this.booked = false;
 			this.startGame();
 		} else {
 			this.stopGame();
@@ -257,7 +263,9 @@ enyo.kind({
 	},
 
 	bookClicked: function() {
+		this.booked = true;
 		this.clearNotes();
+		this.$.score.setShowing(false);
 		var gammeLength = Util.getGamme().length;
 		var clefNote = this.$.clef.getNote();
 		var startNote = (clefNote == 4 ? 0 : 2);
@@ -272,6 +280,10 @@ enyo.kind({
 			this.currentNote = i - startIndex;
 			this.drawNote();
 		}
+		this.updateBookIndex();
+	},
+	
+	updateBookIndex: function() {
 		this.bookIndex = (this.bookIndex + 1) % 2;
 		this.$.bookindex.setContent(this.bookIndex+1);
 	},
