@@ -1,7 +1,14 @@
+.centerer {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	width: 600px;
+}
+
 .staff {
 	position: relative;
-	margin-left: 100px;
-	margin-top: 100px;
+	margin-left: 0%;
+	margin-top: 50px;
 }
 
 .clef {
@@ -47,11 +54,11 @@
 
 .switch-clef-block {
 	margin-top: 40px;
-	margin-left: 100px;
+	margin-left: 0%;
 }
 
 .switch-input-block {
-	margin-left: 100px;
+	margin-left: 0%;
 }
 
 .switch-line {
@@ -69,7 +76,7 @@
 }
 
 .keyboard {
-	margin-left: 120px;
+	margin-left: 2%;
 }
 
 .keyboard-key {
@@ -103,7 +110,7 @@
 .slider-block {
 	position: relative;
 	display: inline-block;
-	margin-left: 30px;
+	margin-left: 20px;
 	width: 150px;
 	height: 80px;
 	vertical-align: 30pt;
@@ -135,8 +142,8 @@
 
 .playstop-button {
 	position: absolute;
-	left: 750px;
-	top: 150px;
+	left: 520px;
+	top: 250px;
 	width: 80px;
 	height: 80px;
 }
@@ -146,8 +153,8 @@
 
 .book-button {
 	position: absolute;
-	left: 750px;
-	top: 250px;
+	left: 520px;
+	top: 350px;
 	width: 80px;
 	height: 60px;
 }

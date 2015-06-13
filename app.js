@@ -4,51 +4,53 @@ enyo.kind({
 	name: "LLMusic.App",
 	kind: enyo.Control,
 	components: [
-		{name: "staff", classes: "staff", components: [
-			{name: "clef", kind: "LLMusic.Clef"},
-			{name: "notes", components: [
-			]}
-		]},
-		{kind: "onyx.Button", name:"playstop", classes: "playstop-button", ontap:"playstopClicked", components: [
-			{name: "playstopimage", kind: "Image", src: "images/play.svg", classes: "playstop-image"}
-		]},
-		{kind: "onyx.Button", name:"book", classes: "book-button", ontap:"bookClicked", components: [
-			{name: "bookimage", kind: "Image", src: "images/book.svg", classes: "book-image"},
-			{name: "bookindex", content: "1", classes: "book-index"}
-		]},		
-		{name: "score", classes: "score", content: "-/-", showing: false},
-		{classes: "switch-clef-block", components: [
-			{kind: "Image", src: "images/F_clef_icon.svg", classes: "switch-clef"},
-			{classes: "switch-line", components: [
-				{name: "clefswitch", kind: "onyx.ToggleButton", onContent: "", offContent: "", classes: "switch-forced", onChange: "clefChanged"}
+		{classes: "centerer", components: [
+			{name: "staff", classes: "staff", components: [
+				{name: "clef", kind: "LLMusic.Clef"},
+				{name: "notes", components: [
+				]}
 			]},
-			{kind: "Image", src: "images/G_clef_icon.svg", classes: "switch-clef"},
-			{classes: "slider-block", components: [
-				{kind: "Image", src: "images/tempo1.svg", classes: "tempo-image0"},				
-				{kind: "Image", src: "images/tempo5.svg", classes: "tempo-image1"},				
-				{kind: "Image", src: "images/tempo8.svg", classes: "tempo-image2"},			
-				{name: "temposwitch", kind: "onyx.Slider", classes: "tempo-slider", value: 0, increment: 10, onChange:"tempoChanged"}
-			]}
-		]},
-		{classes: "switch-input-block", components: [
-			{kind: "Image", src: "images/keyboard.svg", classes: "switch-clef"},
-			{classes: "switch-line", components: [
-				{name: "inputswitch", kind: "onyx.ToggleButton", onContent: "", offContent: "", classes: "switch-forced", onChange: "inputChanged"}
+			{kind: "onyx.Button", name:"playstop", classes: "playstop-button", ontap:"playstopClicked", components: [
+				{name: "playstopimage", kind: "Image", src: "images/play.svg", classes: "playstop-image"}
 			]},
-			{kind: "Image", src: "images/microphone.svg", classes: "switch-clef"}			
-		]},
-		{classes: "keyboard", name: "keyboard", showing: true, components: [
-			{kind: "Button", name: "button0", content: Util.noteName(0), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button1", content: Util.noteName(1), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button2", content: Util.noteName(2), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button3", content: Util.noteName(3), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button4", content: Util.noteName(4), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button5", content: Util.noteName(5), classes: "keyboard-key", ontap: "noteClicked"},
-			{kind: "Button", name: "button6", content: Util.noteName(6), classes: "keyboard-key", ontap: "noteClicked"},
-		]},
-		{classes: "microphone", name: "microphone", showing: false, components: [
-			{name: "talk", content: "", classes: "talk-text"},
-			{kind: "Image", src: "images/microphone_gray.svg", classes: "talk-image"}
+			{kind: "onyx.Button", name:"book", classes: "book-button", ontap:"bookClicked", components: [
+				{name: "bookimage", kind: "Image", src: "images/book.svg", classes: "book-image"},
+				{name: "bookindex", content: "1", classes: "book-index"}
+			]},		
+			{name: "score", classes: "score", content: "-/-", showing: false},
+			{classes: "switch-clef-block", components: [
+				{kind: "Image", src: "images/F_clef_icon.svg", classes: "switch-clef"},
+				{classes: "switch-line", components: [
+					{name: "clefswitch", kind: "onyx.ToggleButton", onContent: "", offContent: "", classes: "switch-forced", onChange: "clefChanged"}
+				]},
+				{kind: "Image", src: "images/G_clef_icon.svg", classes: "switch-clef"},
+				{classes: "slider-block", components: [
+					{kind: "Image", src: "images/tempo1.svg", classes: "tempo-image0"},				
+					{kind: "Image", src: "images/tempo5.svg", classes: "tempo-image1"},				
+					{kind: "Image", src: "images/tempo8.svg", classes: "tempo-image2"},			
+					{name: "temposwitch", kind: "onyx.Slider", classes: "tempo-slider", value: 0, increment: 10, onChange:"tempoChanged"}
+				]}
+			]},
+			{classes: "switch-input-block", components: [
+				{kind: "Image", src: "images/keyboard.svg", classes: "switch-clef"},
+				{classes: "switch-line", components: [
+					{name: "inputswitch", kind: "onyx.ToggleButton", onContent: "", offContent: "", classes: "switch-forced", onChange: "inputChanged"}
+				]},
+				{kind: "Image", src: "images/microphone.svg", classes: "switch-clef"}			
+			]},
+			{classes: "keyboard", name: "keyboard", showing: true, components: [
+				{kind: "Button", name: "button0", content: Util.noteName(0), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button1", content: Util.noteName(1), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button2", content: Util.noteName(2), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button3", content: Util.noteName(3), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button4", content: Util.noteName(4), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button5", content: Util.noteName(5), classes: "keyboard-key", ontap: "noteClicked"},
+				{kind: "Button", name: "button6", content: Util.noteName(6), classes: "keyboard-key", ontap: "noteClicked"},
+			]},
+			{classes: "microphone", name: "microphone", showing: false, components: [
+				{name: "talk", content: "", classes: "talk-text"},
+				{kind: "Image", src: "images/microphone_gray.svg", classes: "talk-image"}
+			]}
 		]}
 	],
 	
