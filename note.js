@@ -62,17 +62,9 @@ enyo.kind({
 	computePosition: function() {
 		var y;
 		if (this.clef == 4) {
-			if (this.octave == 4) {
-				y = this.note;
-			} else if (this.octave == 5) {
-				y = 7+this.note;		
-			}
+			y = this.note+(this.octave-4)*7;
 		} else if (this.clef == 3) {
-			if (this.octave == 2) {
-				y = this.note-2;
-			} else if (this.octave == 3) {
-				y = this.note+5;		
-			}		
+			y = this.note+(this.octave-2)*7-2;
 		}
 		var posy = 148-(y*12);
 		this.$.noteimage.applyStyle("top", posy+"px");
