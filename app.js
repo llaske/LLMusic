@@ -16,7 +16,7 @@ enyo.kind({
 			{kind: "onyx.Button", name:"book", classes: "book-button", ontap:"bookClicked", components: [
 				{name: "bookimage", kind: "Image", src: "images/book.svg", classes: "book-image"},
 				{name: "bookindex", content: "1", classes: "book-index"}
-			]},		
+			]},
 			{name: "score", classes: "score", content: "-/-", showing: false},
 			{classes: "switch-clef-block", components: [
 				{kind: "Image", src: "images/F_clef_icon.svg", classes: "switch-clef"},
@@ -25,9 +25,9 @@ enyo.kind({
 				]},
 				{kind: "Image", src: "images/G_clef_icon.svg", classes: "switch-clef"},
 				{classes: "slider-block", components: [
-					{kind: "Image", src: "images/tempo1.svg", classes: "tempo-image0"},				
-					{kind: "Image", src: "images/tempo5.svg", classes: "tempo-image1"},				
-					{kind: "Image", src: "images/tempo8.svg", classes: "tempo-image2"},			
+					{kind: "Image", src: "images/tempo1.svg", classes: "tempo-image0"},
+					{kind: "Image", src: "images/tempo5.svg", classes: "tempo-image1"},
+					{kind: "Image", src: "images/tempo8.svg", classes: "tempo-image2"},
 					{name: "temposwitch", kind: "onyx.Slider", classes: "tempo-slider", value: 0, increment: 10, onChange:"tempoChanged"}
 				]}
 			]},
@@ -36,7 +36,7 @@ enyo.kind({
 				{classes: "switch-line", components: [
 					{name: "inputswitch", kind: "onyx.ToggleButton", onContent: "", offContent: "", classes: "switch-forced", onChange: "inputChanged"}
 				]},
-				{kind: "Image", src: "images/microphone.svg", classes: "switch-clef"}			
+				{kind: "Image", src: "images/microphone.svg", classes: "switch-clef"}
 			]},
 			{classes: "keyboard", name: "keyboard", showing: true, components: [
 				{kind: "Button", name: "button0", content: Util.noteName(0), classes: "keyboard-key", ontap: "noteClicked"},
@@ -53,7 +53,7 @@ enyo.kind({
 			]}
 		]}
 	],
-	
+
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
@@ -77,7 +77,7 @@ enyo.kind({
 		this.$.inputswitch.setDisabled(true);
 		this.$.score.setShowing(false);
 		this.$.book.setDisabled(true);
-			
+
 		// Generate expected notes
 		this.expectedNotes = [];
 		this.inputNotes = [];
@@ -87,40 +87,40 @@ enyo.kind({
 		var startNote = (clefNote == 4 ? 0 : 2);
 		var startOctave = (clefNote == 4 ? 4 : 2);
 		for(var i = 0 ; i < 8 ; i++) {
-			var random = Math.floor(Math.random()*13)+1;
+			var random = Math.floor(Math.random()*13);
 			var note = (startNote + random) % gammeLength;
-			var octave = (startOctave + Math.floor(random / gammeLength));
+			var octave = (startOctave + Math.floor((startNote + random) / gammeLength));
 			this.expectedNotes.push({note: note, octave: octave});
 			this.inputNotes.push(-1);
 		}
-		
+
 		// Remove notes
 		this.clearNotes();
 		this.$.talk.setContent("");
-		
+
 		// Launch recognition timer
 		this.currentNote = -1;
 		var delay = (4000-this.$.temposwitch.getValue()*22);
 		if (this.recognition != null) {
 			this.recognitionValue = '';
 			this.recognition.start();
-		}		
-        this.timer = window.setInterval(enyo.bind(this, "drawNote"), delay);		
+		}
+        this.timer = window.setInterval(enyo.bind(this, "drawNote"), delay);
 	},
-	
+
 	stopGame: function() {
 		// Change interface
 		this.$.playstopimage.setSrc("images/play.svg");
 		this.$.clefswitch.setDisabled(false);
 		this.$.inputswitch.setDisabled(false);
 		this.$.book.setDisabled(false);
-		
+
 		// Stop timer
 		if (this.timer != null) {
 			window.clearInterval(this.timer);
-			this.timer == null;		
+			this.timer == null;
 		}
-		
+
 		this.started = false;
 		if (this.recognition != null) {
 			// Stop recognition
@@ -134,10 +134,10 @@ enyo.kind({
 	clearNotes: function() {
 		var notes = [];
 		enyo.forEach(this.$.notes.getControls(), function(note) { notes.push(note); });
-		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy(); }	
+		for (var i = 0 ; i < notes.length ; i++) { notes[i].destroy(); }
 	},
-	
-	drawNote: function() {	
+
+	drawNote: function() {
 		// Pass last note in play, stop game
 		if (this.started) {
 			this.currentNote = this.currentNote + 1;
@@ -148,7 +148,7 @@ enyo.kind({
 				return;
 			}
 		}
-		
+
 		// Draw expected note at this time
 		var note = this.expectedNotes[this.currentNote];
 		var noteObject = this.$.notes.createComponent(
@@ -165,7 +165,7 @@ enyo.kind({
 		this.noteObjects.push(noteObject);
 		noteObject.render();
 	},
-	
+
 	computeScore: function() {
 		// Compute score
 		var len = this.expectedNotes.length;
@@ -185,7 +185,7 @@ enyo.kind({
 				noteObject.setColor(0);
 			}
 		}
-		
+
 		// Display
 		this.$.score.setContent(score+"/"+len);
 		this.$.score.addRemoveClass("score-bad", false);
@@ -200,7 +200,7 @@ enyo.kind({
 			this.$.score.addRemoveClass("score-bad", true);
 		this.$.score.setShowing(true);
 	},
-	
+
 	// Event handling
 	clefChanged: function(inSender, inEvent) {
 		this.clearNotes();
@@ -210,7 +210,7 @@ enyo.kind({
 			this.bookClicked();
 		}
 	},
-	
+
 	inputChanged: function(inSender, inEvent) {
 		if (!inSender.getValue()) {
 			// Show keyboard
@@ -236,7 +236,7 @@ enyo.kind({
 				this.$.temposwitch.setValue(50);
 		}
 	},
-	
+
 	noteClicked: function(inSender, inEvent) {
 		if (this.started && this.currentNote != -1) {
 			// Display note value
@@ -245,7 +245,7 @@ enyo.kind({
 			this.noteObjects[this.currentNote].setNotename(note+"?");
 		}
 	},
-	
+
 	tempoChanged: function(inSender, inEvent) {
 		if (this.started) {
 			inSender.setValue(this.tempo);
@@ -253,7 +253,7 @@ enyo.kind({
 			this.tempo = inSender.getValue();
 		}
 	},
-	
+
 	playstopClicked: function(inSender, inEvent) {
 		this.started = !this.started;
 		if (this.started) {
@@ -284,12 +284,12 @@ enyo.kind({
 		}
 		this.updateBookIndex();
 	},
-	
+
 	updateBookIndex: function() {
 		this.bookIndex = (this.bookIndex + 1) % 2;
 		this.$.bookindex.setContent(this.bookIndex+1);
 	},
-	
+
 	recognitionResult: function(s, e) {
 		var interimRecognition = '';
 		for (var i = e.resultIndex; i < e.results.length; ++i) {
@@ -306,7 +306,7 @@ enyo.kind({
 			this.computeScore();
 		}
 	},
-	
+
 	recognitionInput: function() {
 		var answers = this.recognitionValue.split(' ');
 		for (var i = 0 ; i < answers.length ; i++) {
